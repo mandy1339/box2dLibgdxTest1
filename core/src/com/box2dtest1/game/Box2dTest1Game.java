@@ -18,24 +18,32 @@ import static com.box2dtest1.game.utils.Constants.PPM;
 
 public class Box2dTest1Game extends ApplicationAdapter {
 
+	// CLASS INSTANCE DATA
+	// -	-	-	-	-	-	-	-	-	-	-	-	-	-
+	private boolean DEBUG =  false;
+	private final float SCALE = 2.0f;
 	private OrthographicCamera camera;
 	private World world;
 	private Body player;
 	private Body platform;
-	private Box2DDebugRenderer b2dr;
+	private Box2DDebugRenderer b2dr;			// View debug borders
+	private SpriteBatch batch;					// Our batch to print things
+	private Texture vampTex;
 
 	@Override
 	public void create () {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, w / 2, h / 2);
+		camera.setToOrtho(false, w / SCALE, h / SCALE);
 
 		world = new World(new Vector2(0, -9.8f), false);
 		b2dr = new Box2DDebugRenderer();
 
 		player = createPlayer();
 		platform = createPlatform();
+		batch = new SpriteBatch();
+		vampTex = new Texture("loving-vampire2.png");
 	}
 
 	@Override
@@ -44,11 +52,18 @@ public class Box2dTest1Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		b2dr.render(world, camera.combined.scl(PPM));		// Render the debugging world / shapes
+
+		// Rendering Batch (keep logic off of here
+		batch.begin();
+		// Draw the texture where the square of player is
+		batch.draw(vampTex, player.getPosition().x * PPM - vampTex.getWidth()/2, player.getPosition().y * PPM - vampTex.getHeight()/2);
+		batch.end();
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		camera.setToOrtho(false, width / 2, height / 2);
+		camera.setToOrtho(false, width / SCALE, height / SCALE);
 	}
 
 	@Override
@@ -64,6 +79,8 @@ public class Box2dTest1Game extends ApplicationAdapter {
 		world.step(1/ 60f, 6, 2);					// Calculate how smooth the motion is
 		inputUpdate(delta);
 		cameraUpdate(delta);						// Center camera on player via helping function
+		batch.setProjectionMatrix(camera.combined);
+
 	}
 
 	public void inputUpdate(float delta) {
@@ -76,7 +93,8 @@ public class Box2dTest1Game extends ApplicationAdapter {
 			horizontalForce += 1;
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-			player.applyForceToCenter(0, 300, false);
+			player.setLinearVelocity(player.getLinearVelocity().x, 0);	// Reset vertical accel before reapplying next jump
+			player.applyForceToCenter(0, 400, false);
 		}
 
 		player.setLinearVelocity(horizontalForce * 5, player.getLinearVelocity().y);
