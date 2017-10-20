@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="2017.07.26" orientation="orthogonal" renderorder="right-down" width="12" height="12" tilewidth="32" tileheight="32" nextobjectid="5">
+ <tileset firstgid="1" source="tiledSet2.tsx"/>
+ <layer name="Tile Layer 1" width="12" height="12">
+  <data encoding="base64" compression="zlib">
+   eJxjYWBgYCERMxKJh4J6fP4bCu6npnpc4YEPAwBMowEh
+  </data>
+ </layer>
+ <objectgroup name="collision-layer">
+  <object id="1" x="31" y="38">
+   <polyline points="0,0 3,308"/>
+  </object>
+  <object id="2" x="378" y="354">
+   <polyline points="0,0 -345,-6"/>
+  </object>
+  <object id="3" x="350" y="319">
+   <polyline points="0,0 2,-283 -318,-286"/>
+  </object>
+  <object id="4" x="132" y="160">
+   <polyline points="0,0 154,-1 154,32 -3,32 -3,2"/>
+  </object>
+ </objectgroup>
+</map>
